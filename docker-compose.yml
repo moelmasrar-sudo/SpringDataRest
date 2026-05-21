@@ -1,0 +1,33 @@
+version: "3"
+services:
+  api:
+    container_name: api
+    image: api
+    restart: always
+    build:
+      dockerfile: ./Dockerfile
+    ports:
+      - 9090:8080
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_PORT: 3306
+  mysqldb:
+    container_name: mysqldb
+    image: mysql
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: springboot
+      MYSQL_ROOT_PASSWORD: root
+  frontend:
+    image: frontend
+    restart: always
+    build:
+      context: ./src/main/webapp/reactjs/
+    ports:
+      - 3000:80
+    environment:
+      API_HOST: http://localhost:9090
+

@@ -1,0 +1,49 @@
+package org.springdatarest;
+
+import org.springdatarest.modele.Proprietaire;
+import org.springdatarest.modele.ProprietaireRepo;
+import org.springdatarest.modele.VoitureRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
+import org.springdatarest.modele.Voiture;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
+
+@SpringBootApplication
+public class SpringDataRestApplication {
+    @Autowired
+    private ProprietaireRepo proprietaireRepo;
+
+	public static void main(String[] args) {
+		SpringApplication.run(SpringDataRestApplication.class, args);
+	}
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .csrf(AbstractHttpConfigurer::disable);
+        return http.build();
+    }
+
+    @Bean
+    CommandLineRunner runner(VoitureRepo repository) {
+        return args -> {
+            Proprietaire proprietaire1 = new Proprietaire("Ali" , "Hassan");
+            Proprietaire proprietaire2 = new Proprietaire("Najat" , "Bani");
+            proprietaireRepo.save(proprietaire1);
+            proprietaireRepo.save(proprietaire2);
+            repository.save(new Voiture("Toyota", "Corolla", "Grise", "A-1-9090", 2018, 95000,
+                    proprietaire1));
+            repository.save(new Voiture("Ford", "Fiesta", "Rouge", "A-2-8090", 2015, 90000,
+                    proprietaire1));
+            repository.save(new Voiture("Honda", "CRV", "Bleu", "A-3-7090", 2016, 140000,
+                    proprietaire2));
+        };
+    }
+}
+
