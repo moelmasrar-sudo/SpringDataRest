@@ -3,9 +3,11 @@ package org.springdatarest.modele;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"})
 public interface VoitureRepo extends CrudRepository<Voiture, Long> {
 
     List<Voiture> findByModele(@Param("modele") String modele);

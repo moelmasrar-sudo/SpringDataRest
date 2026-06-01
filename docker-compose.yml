@@ -1,33 +1,36 @@
-version: "3"
+version: '3.8'
 services:
-  api:
-    container_name: api
-    image: api
-    restart: always
-    build:
-      dockerfile: ./Dockerfile
-    ports:
-      - 9090:8080
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-db
     environment:
-      MYSQL_HOST: mysqldb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_PORT: 3306
-  mysqldb:
-    container_name: mysqldb
-    image: mysql
+      POSTGRES_DB: springboot
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
     ports:
-      - 3307:3306
-    environment:
-      MYSQL_DATABASE: springboot
-      MYSQL_ROOT_PASSWORD: root
-  frontend:
-    image: frontend
-    restart: always
-    build:
-      context: ./src/main/webapp/reactjs/
-    ports:
-      - 3000:80
-    environment:
-      API_HOST: http://localhost:9090
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
+  app:
+    build: .
+    container_name: spring-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/springboot
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - db
+
+  web:
+    build: ./src/main/webapp/reactjs
+    container_name: react-web
+    ports:
+      - "3000:80"
+    depends_on:
+      - app
+
+volumes:
+  postgres_data:

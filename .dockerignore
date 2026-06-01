@@ -1,0 +1,15 @@
+target/
+**/target/
+**/node_modules/
+**/build/
+**/.next/
+**/.cache/
+**/.DS_Store
+.git/
+.gitignore
+.vscode/
+.idea/
+*.iml
+*.log
+**/*.log
+**/.env
