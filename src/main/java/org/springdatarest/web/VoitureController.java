@@ -16,7 +16,7 @@ import java.util.Optional;
     allowedHeaders = "*",
     methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS}
 )
-@RequestMapping("/voitures")
+@RequestMapping("/api/voitures")
 public class VoitureController {
 
     @Autowired
@@ -57,6 +57,11 @@ public class VoitureController {
         voitureDB.setImmatricule(voiture.getImmatricule());
         voitureDB.setPrix(voiture.getPrix());
         voitureDB.setAnnee(voiture.getAnnee());
+
+        if (voiture.getProprietaire() != null) {
+            Optional<Proprietaire> proprietaire = proprietaireRepo.findById(voiture.getProprietaire().getId());
+            proprietaire.ifPresent(voitureDB::setProprietaire);
+        }
 
         return voitureRepo.save(voitureDB);
     }
