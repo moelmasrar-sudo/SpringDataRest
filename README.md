@@ -1,5 +1,18 @@
 # SpringDataRest
 
+## Login Credentials
+
+The application uses Spring Security with JWT authentication. The following default users are automatically created on the first startup:
+
+- **Admin User**
+  - Username: `admin`
+  - Password: `admin`
+- **Standard User**
+  - Username: `user`
+  - Password: `user`
+
+Use these credentials to log in on the frontend (http://localhost:3000) or when making authenticated API requests.
+
 ## Build with Docker
 
 Build the backend and frontend images, then run them with Docker Compose.
